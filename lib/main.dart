@@ -1,28 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
-void main() {flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-runApp(DqmMonitorApp());}
+void main() {
+  runApp(DqmMonitorApp());
+}
 
 var headings = [Text('SCHOOL NAME'), Text('# OF FILE'), Text('LAST FILE SENT'), Text('LAST ELOG ENTRY'), Text('RATE OF TRIGGERS'), Text('RATE OF TRACKS')];
 var values =['SALE-01', '42', 'peppe',  'no', '0', '2'];
 
 var drawer = ['SETTINGS', 'DOCS', 'MONITOR', 'PLOT']; //unused
-
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-Future<void> _showNotification() async {
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'your channel id', 'your channel name', 'your channel description',
-      importance: Importance.Max, priority: Priority.High);
-  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-  var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.show(
-      0, 'plain title', 'plain body', platformChannelSpecifics,
-      payload: 'item x');
-}
-
 
 class AppDrawer extends StatelessWidget{
   @override
@@ -86,12 +73,13 @@ class Settings extends StatelessWidget {
                 TimeOfDay picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
                 print(picked.hour);
                 print(picked.minute);
+                //TODO:add scheduled notification
               }),
           ListTile(
             title: Text("ELOG Alarm"),
-            subtitle: Text("Quanto tempo dopo va avvisato?"),
-            onTap: () async {
-              await _showNotification();
+            subtitle: Text("ELOG not taken alarm"),
+            onTap: () {
+              //TODO:add scheduled notification
             },
           )
         ],
