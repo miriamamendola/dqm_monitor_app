@@ -76,10 +76,10 @@ const EEE_ACTIVE_STATIONS = [
   'VICE-01'
 ];
 
-var drawer = ['SETTINGS', 'DOCS', 'MONITOR', 'PLOT'];
+const drawer = ['SETTINGS', 'DOCS', 'MONITOR', 'PLOT'];
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-var headings = [
+const headings = [
   Text('SCHOOL NAME'),
   Text('# OF FILE'),
   Text('LAST FILE SENT'),
