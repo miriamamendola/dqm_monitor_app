@@ -76,7 +76,7 @@ const EEE_ACTIVE_STATIONS = [
   'VICE-01'
 ];
 
-const drawer = ['SETTINGS', 'DOCS', 'MONITOR', 'PLOT'];
+const drawer = ['SETTINGS', 'DOCS', 'MONITOR', 'PLOT']; //unused drawer links
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 const headings = [
@@ -86,7 +86,7 @@ const headings = [
   Text('LAST ELOG ENTRY'),
   Text('RATE OF TRIGGERS'),
   Text('RATE OF TRACKS')
-]; //unused
+];
 
 var values = [
   'SALE-01',
