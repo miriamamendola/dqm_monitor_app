@@ -11,14 +11,23 @@ class AppDrawer extends StatelessWidget{
             children: <Widget>[
               UserAccountsDrawerHeader(
                   currentAccountPicture: CircleAvatar(),
-                  accountName: Text(values[0]),
-                  accountEmail: null
+                accountName: Text(EEE_ACTIVE_STATIONS[selectedStation]),
+                accountEmail: null,
                   //TODO: make avatar show the status of the chosen MRPC
               ),
               ListTile(
+                  leading: Icon(Icons.home),
+                  title: Text('HOME'),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/');
+                  }
+              ), Divider(),
+              ListTile(
                   leading: Icon(Icons.desktop_mac),
                   title: Text('MONITOR'),
-                  onTap: () {Navigator.pushNamed(context, '/');}
+                  onTap: () {
+                    Navigator.pushNamed(context, '/monitor');
+                  }
               ), Divider(),
               ListTile(
                   leading: Icon(Icons.show_chart),

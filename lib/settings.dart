@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'main.dart';
 import 'drawer.dart';
 
-
 class Settings extends StatefulWidget{
   @override
   _SettingsState createState() => _SettingsState();
@@ -130,7 +129,8 @@ class EEEActiveStations extends StatelessWidget{
                 return ListTile(
                     title: Text(EEE_ACTIVE_STATIONS[index]),
                     onTap: (){
-                      //TODO:this method assign the station
+                      selectedStation = index;
+
                     }
                 );
               },

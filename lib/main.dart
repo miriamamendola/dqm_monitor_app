@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'docs.dart';
 import 'monitor.dart';
 import 'settings.dart';
+import 'drawer.dart';
 
 void main() async {
   flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
@@ -87,24 +88,43 @@ const headings = [
   Text('RATE OF TRIGGERS'),
   Text('RATE OF TRACKS')
 ];
-
-var values = [
-  'SALE-01',
-  '80',
-  'SALE-01-2019-04-25-00078.bin',
-  '09:40 16/04/2019',
-  '71.0',
-  '30.0'
-];
+var monitorValues = [];
+var selectedStation = 0;
+//TODO: implement refresh in Home()
+var imgUrl = 'https://iatw.cnaf.infn.it/eee/monitor/dqm2/datatransfer/eventdisplay/' +
+    EEE_ACTIVE_STATIONS[selectedStation] + 'last.gif';
 
 class DqmMonitorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(title: 'Monitor DQM', initialRoute: '/', routes: {
-      '/': (context) => Monitor(),
+      '/monitor': (context) => Monitor(),
       '/settings': (context) => Settings(),
       '/docs': (context) => Docs(),
-      '/eeeactivestations': (context) => EEEActiveStations()
+      '/eeeactivestations': (context) => EEEActiveStations(),
+      '/': (context) => Home()
     });
   }
 }
+
+class Home extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: new AppBar(
+          title: new Text("DQM"),
+        ),
+        drawer: AppDrawer(),
+        body: Center(
+            child: Column(
+                children: <Widget>[
+                  Image.network(imgUrl)
+                ]) /**/
+        )
+    );
+  }
+
+
+}
+
