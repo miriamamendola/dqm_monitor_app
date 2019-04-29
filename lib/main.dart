@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'docs.dart';
 import 'drawer.dart';
@@ -85,13 +87,16 @@ const headings = [
   Text('RATE OF TRIGGERS'),
   Text('RATE OF TRACKS')
 ];
-var monitorValues = [];
+
 var selectedStation = 0;
+
+
 //TODO: implement refresh in Home()
 var imgUrl = 'https://iatw.cnaf.infn.it/eee/monitor/dqm2/datatransfer/eventdisplay/' +
     EEE_ACTIVE_STATIONS[selectedStation] + 'last.gif';
 
 class DqmMonitorApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(title: 'Monitor DQM', initialRoute: '/', routes: {
@@ -104,22 +109,47 @@ class DqmMonitorApp extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+
+  _loadSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    selectedStation = (prefs.getInt('selectedStation') ?? 0);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSharedPrefs();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: new AppBar(
-          title: new Text("DQM"),
-        ),
-        drawer: AppDrawer(),
-        body: Center(
+    try {
+      return Scaffold(
+          appBar: new AppBar(
+            title: new Text(EEE_ACTIVE_STATIONS[selectedStation]),
+
+          ),
+          body: Center(
             child: Column(
                 children: <Widget>[
+                  Text(EEE_ACTIVE_STATIONS[selectedStation] + " seems to work"),
+                  Text("enjoy a gif"),
                   Image.network(imgUrl)
-                ]) /**/
-        )
-    );
+                ]),
+          ),
+
+          drawer: AppDrawer()
+      );
+    } catch (e) {
+      return CircularProgressIndicator();
+    }
   }
 
 
