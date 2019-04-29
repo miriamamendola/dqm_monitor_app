@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 import 'docs.dart';
+import 'drawer.dart';
 import 'monitor.dart';
 import 'settings.dart';
-import 'drawer.dart';
 
 void main() async {
-  flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
   runApp(DqmMonitorApp());
 }
 
@@ -79,7 +78,6 @@ const EEE_ACTIVE_STATIONS = [
 ];
 
 const drawer = ['SETTINGS', 'DOCS', 'MONITOR', 'PLOT']; //unused drawer links
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 const headings = [
   Text('SCHOOL NAME'),
