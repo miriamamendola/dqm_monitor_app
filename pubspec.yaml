@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter_local_notifications: ^0.6.1
   http: ^0.11.3
+  html: ^0.14.0+2
+  shared_preferences: ^0.5.2
   flutter:
     sdk: flutter
 
