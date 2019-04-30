@@ -1,19 +1,36 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'main.dart';
 
-class AppDrawer extends StatelessWidget{
+
+class AppDrawer extends StatefulWidget {
+  _AppDrawerState createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
+  var background;
+
   @override
   Widget build(BuildContext context){
+    if (telescope.status == "green") {
+      background = Colors.green;
+    } else if (telescope.status == "yellow") {
+      background = Colors.yellow;
+    } else if (telescope.status == "red") {
+      background = Colors.red;
+    } else {
+      background = Colors.grey;
+    }
     return Drawer(
         child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
               UserAccountsDrawerHeader(
-                  currentAccountPicture: CircleAvatar(),
+                currentAccountPicture: CircleAvatar(
+                    backgroundColor: background),
                 accountName: Text(EEE_ACTIVE_STATIONS[selectedStation]),
                 accountEmail: null,
-                  //TODO: make avatar show the status of the chosen MRPC
               ),
               ListTile(
                   leading: Icon(Icons.home),
@@ -45,4 +62,7 @@ class AppDrawer extends StatelessWidget{
               ), Divider()
             ]
         )
-    );}}
+    );
+  }
+
+}

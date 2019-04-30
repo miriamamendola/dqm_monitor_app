@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'drawer.dart';
 import 'main.dart';
@@ -27,7 +28,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {return Scaffold(
       appBar: new AppBar(
-        title: new Text("Settings"),
+        title: new Text("SETTINGS"),
       ),
       body: ListView(
         children: <Widget>[
@@ -48,7 +49,7 @@ class EEEActiveStations extends StatelessWidget{
 
     return Scaffold(
         appBar: new AppBar(
-          title: Text("Settings"),
+          title: Text("EEE ACTIVE STATIONS"),
         ),
         body: new Container(
             child: ListView.separated(
@@ -57,9 +58,11 @@ class EEEActiveStations extends StatelessWidget{
               itemBuilder: (context, index){
                 return ListTile(
                     title: Text(EEE_ACTIVE_STATIONS[index]),
-                    onTap: (){
+                    onTap: () async {
                       selectedStation = index;
-
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setInt('selectedStation', selectedStation);
+                      Navigator.pop(context);
                     }
                 );
               },

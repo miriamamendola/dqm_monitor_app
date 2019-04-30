@@ -1,53 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'main.dart';
-import 'drawer.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:html/parser.dart' show parse;
-
-//TODO: setting up something to update the json parsed file
-const url = 'https://iatw.cnaf.infn.it/eee/monitor/';
-var document;
-
-
-//TODO: maybe since it's useful for other classes, I'll move this class in another file
-class MonitorData {
-  final String schoolName;
-  final String filesSent;
-  final String lastFileSent;
-  final String lastElogEntry;
-  final String rateOfTriggers;
-  final String rateOfTracks;
-  final String telescopeStatus;
-
-
-  MonitorData(
-      {this.schoolName, this.filesSent, this.lastFileSent, this.lastElogEntry, this.rateOfTriggers, this.rateOfTracks, this.telescopeStatus});
-
-//qui metto il parser
-  factory MonitorData.parseHTML(String str) {
-    print(url);
-    final document = parse(str);
-    final table = document.body
-        .getElementsByTagName("table")
-        .first;
-    final tableRow = table.getElementsByTagName("tr")[selectedStation +
-        1]; //element
-
-    return MonitorData(
-        schoolName: tableRow.children[0].children[0].text,
-        //element
-        filesSent: tableRow.children[4].text.split("[")[0],
-        lastFileSent: tableRow.children[3].text,
-        lastElogEntry: tableRow.children[5].text,
-        rateOfTriggers: tableRow.children[8].text,
-        rateOfTracks: tableRow.children[9].text
-    );
-  }
-
-}
+import 'drawer.dart';
+import 'main.dart';
+import "parser.dart";
 
 class Monitor extends StatefulWidget{
   @override
@@ -64,6 +21,7 @@ class _MonitorState extends State<Monitor> {
   @override
   void initState() {
     super.initState();
+
     //WidgetsBinding.instance
     //  .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
     _refresh();
@@ -74,7 +32,7 @@ class _MonitorState extends State<Monitor> {
     try {
       return Scaffold(
           appBar: new AppBar(
-            title: new Text("Monitor DQM"),
+            title: new Text("MONITOR DQM"),
 
           ),
           body: RefreshIndicator(onRefresh: _refresh,
@@ -109,10 +67,18 @@ class _MonitorState extends State<Monitor> {
               )
           ),
           drawer: AppDrawer()
+
       );
     } catch (e) {
-      return CircularProgressIndicator();
+      return new Container(
+          child: SizedBox(child: const CircularProgressIndicator(),
+              width: 200,
+              height: 200
+          )
+
+      );
     }
+
   }
 
   Future<Null> _refresh() {
@@ -131,6 +97,7 @@ class _MonitorState extends State<Monitor> {
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       return MonitorData.parseHTML(response.body);
+
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');

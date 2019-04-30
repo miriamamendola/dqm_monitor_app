@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 import 'docs.dart';
 import 'drawer.dart';
 import 'monitor.dart';
+import 'parser.dart';
 import 'settings.dart';
+
 
 void main() async {
   runApp(DqmMonitorApp());
@@ -89,11 +91,9 @@ const headings = [
 ];
 
 var selectedStation = 0;
-
+TelescopeStatus telescope;
 
 //TODO: implement refresh in Home()
-var imgUrl = 'https://iatw.cnaf.infn.it/eee/monitor/dqm2/datatransfer/eventdisplay/' +
-    EEE_ACTIVE_STATIONS[selectedStation] + 'last.gif';
 
 class DqmMonitorApp extends StatelessWidget {
 
@@ -125,13 +125,47 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _refresh();
     _loadSharedPrefs();
   }
 
+  Future<Null> _refresh() {
+    return fetchStatus().then((_status) {
+      setState(() {
+        telescope = _status;
+      });
+    });
+  }
+
+  Future<TelescopeStatus> fetchStatus() async
+  {
+    final response =
+    await http.get(url);
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON
+      return TelescopeStatus.getStatus(response.body);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    var status;
     try {
-      return Scaffold(
+      if (telescope.status == "green") {
+        status = "sta funzionando";
+      } else if (telescope.status == "yellow") {
+        status = "potrebbe avere dei problemi";
+      } else if (telescope.status == "red") {
+        status = "non è in funzione";
+      }
+    } catch (e) {
+      return CircularProgressIndicator();
+    }
+    try {
+      return RefreshIndicator(child: Scaffold(
           appBar: new AppBar(
             title: new Text(EEE_ACTIVE_STATIONS[selectedStation]),
 
@@ -139,14 +173,17 @@ class _HomeState extends State<Home> {
           body: Center(
             child: Column(
                 children: <Widget>[
-                  Text(EEE_ACTIVE_STATIONS[selectedStation] + " seems to work"),
-                  Text("enjoy a gif"),
-                  Image.network(imgUrl)
+                  Text(EEE_ACTIVE_STATIONS[selectedStation] + " " + status),
+                  Image.network(
+                      'https://iatw.cnaf.infn.it/eee/monitor/dqm2/datatransfer/eventdisplay/' +
+                          EEE_ACTIVE_STATIONS[selectedStation] + 'last.gif'
+                  ),
+                  Text("spiegazione colori")
                 ]),
           ),
 
           drawer: AppDrawer()
-      );
+      ), onRefresh: _refresh);
     } catch (e) {
       return CircularProgressIndicator();
     }
